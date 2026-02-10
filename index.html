@@ -14,12 +14,10 @@
       --pink2:#ff77b8;
       --shadow: 0 20px 50px rgba(90,22,54,.18);
     }
-
     *{box-sizing:border-box}
     body{
-      margin:0;
-      min-height:100vh;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      margin:0; min-height:100vh;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color:var(--text);
       background: radial-gradient(1200px 800px at 20% 10%, var(--bg2), transparent 60%),
                   radial-gradient(900px 700px at 80% 90%, var(--bg2), transparent 55%),
@@ -27,51 +25,29 @@
       overflow:hidden;
     }
 
-    /* Fondo de corazones */
-    .hearts{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:0;
-    }
+    .hearts{ position:fixed; inset:0; pointer-events:none; z-index:0; }
     .heart{
-      position:absolute;
-      width:18px;
-      height:18px;
+      position:absolute; width:18px; height:18px;
       transform: rotate(45deg);
       opacity:.55;
       filter: drop-shadow(0 6px 10px rgba(255,79,163,.25));
       animation: floatUp linear infinite;
     }
-    .heart:before,
-    .heart:after{
-      content:"";
-      position:absolute;
-      width:18px;
-      height:18px;
-      border-radius:50%;
+    .heart:before,.heart:after{
+      content:""; position:absolute; width:18px; height:18px; border-radius:50%;
       background: radial-gradient(circle at 30% 30%, #fff, transparent 45%),
                   linear-gradient(135deg, var(--pink2), var(--pink));
     }
     .heart:before{ left:-9px; top:0; }
     .heart:after{ left:0; top:-9px; }
-
     @keyframes floatUp{
       from{ transform: translate3d(0,0,0) rotate(45deg) scale(var(--s)); }
       to{ transform: translate3d(var(--dx), -120vh, 0) rotate(calc(45deg + var(--rot))) scale(var(--s)); }
     }
 
-    /* Contenedor principal */
-    .wrap{
-      position:relative;
-      z-index:1;
-      display:grid;
-      place-items:center;
-      min-height:100vh;
-      padding:24px;
-    }
+    .wrap{ position:relative; z-index:1; display:grid; place-items:center; min-height:100vh; padding:24px; }
     .card{
-      width:min(520px, 92vw);
+      width:min(520px,92vw);
       background:var(--card);
       border:1px solid rgba(255,255,255,.55);
       border-radius:24px;
@@ -80,103 +56,57 @@
       backdrop-filter: blur(10px);
     }
 
-    /* FOTO */
     .photo{
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      border-radius: 18px;
-      overflow:hidden;
-      border: 1px solid rgba(255,255,255,.7);
-      box-shadow: 0 18px 40px rgba(90,22,54,.14);
-      margin-bottom: 14px;
-      position: relative;
+      width:100%; aspect-ratio:16/10; border-radius:18px; overflow:hidden;
+      border:1px solid rgba(255,255,255,.7);
+      box-shadow:0 18px 40px rgba(90,22,54,.14);
+      margin-bottom:14px; position:relative;
       background: rgba(255,255,255,.5);
     }
-    .photo img{
-      width:100%;
-      height:100%;
-      object-fit: cover;
-      display:block;
-      transform: scale(1.02);
-    }
+    .photo img{ width:100%; height:100%; object-fit:cover; display:block; }
     .photo::after{
-      content:"";
-      position:absolute;
-      inset:0;
+      content:""; position:absolute; inset:0;
       background: radial-gradient(circle at 20% 20%, rgba(255,255,255,.45), transparent 55%),
                   linear-gradient(180deg, rgba(255,79,163,.10), transparent 60%);
       pointer-events:none;
     }
 
-    h1{
-      margin:0 0 8px;
-      font-size: clamp(24px, 4vw, 32px);
-      letter-spacing:.2px;
-      text-align:center;
-    }
-    p{
-      margin:0 0 16px;
-      text-align:center;
-      line-height:1.35;
-      font-size: 16px;
-      opacity:.9;
-    }
+    h1{ margin:0 0 8px; font-size: clamp(24px, 4vw, 32px); text-align:center; }
+    p{ margin:0 0 16px; text-align:center; opacity:.9; }
 
     .stage{
       position:relative;
-      height:170px;
-      border-radius:18px;
+      height:170px; border-radius:18px;
       background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.35));
       border:1px dashed rgba(255,79,163,.35);
       overflow:hidden;
-      z-index: 1; /* ✅ asegura clicks */
+      z-index:2;
     }
-
-    .sparkle{
-      position:absolute;
-      inset:-40%;
+    .sparkle{ position:absolute; inset:-40%; pointer-events:none; opacity:.35;
       background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.6), transparent 45%),
                   radial-gradient(circle at 70% 60%, rgba(255,255,255,.5), transparent 50%);
       animation: shimmer 6s ease-in-out infinite;
-      opacity:.35;
-      pointer-events:none;
     }
     @keyframes shimmer{
       0%,100%{ transform: translate3d(-2%, -1%, 0) rotate(-2deg); }
       50%{ transform: translate3d(2%, 1%, 0) rotate(2deg); }
     }
 
-    .buttons{
-      position:absolute;
-      inset:0;
-      z-index: 2; /* ✅ botones arriba */
-    }
+    .buttons{ position:absolute; inset:0; z-index:3; }
     .btn{
-      position:absolute;
-      padding:12px 18px;
-      font-size:16px;
-      border-radius:999px;
-      border:none;
-      cursor:pointer;
-      transition: transform .12s ease, filter .12s ease;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
+      position:absolute; padding:12px 18px; font-size:16px;
+      border-radius:999px; border:none; cursor:pointer;
+      user-select:none; -webkit-tap-highlight-color:transparent;
     }
-    .btn:active{ transform: scale(.98); }
-
     .yes{
-      left: 50%;
-      top: 55%;
+      left:50%; top:55%;
       transform: translate(-120%, -50%);
       background: linear-gradient(135deg, #ff2f92, #ff7bbd);
       color:white;
       box-shadow: 0 10px 22px rgba(255,47,146,.28);
     }
-    .yes:hover{ filter: brightness(1.05); }
-
     .no{
-      left: 50%;
-      top: 55%;
+      left:50%; top:55%;
       transform: translate(20%, -50%);
       background: rgba(255,255,255,.9);
       color: var(--text);
@@ -184,81 +114,55 @@
       box-shadow: 0 10px 18px rgba(90,22,54,.10);
     }
 
-    .footer{
-      margin-top:14px;
-      text-align:center;
-      font-size:13px;
-      opacity:.75;
-    }
+    .footer{ margin-top:14px; text-align:center; font-size:13px; opacity:.75; }
 
-    /* Modal */
     .modal{
-      position:fixed;
-      inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
-      background: rgba(0,0,0,.18);
-      z-index:6;
+      position:fixed; inset:0; display:none;
+      align-items:center; justify-content:center;
+      padding:24px; background: rgba(0,0,0,.18);
+      z-index:10;
     }
     .modal.show{ display:flex; }
     .modalCard{
-      width:min(520px, 92vw);
-      background:white;
-      border-radius:22px;
+      width:min(520px,92vw);
+      background:white; border-radius:22px;
       padding:22px 18px;
       box-shadow: 0 22px 60px rgba(0,0,0,.25);
       text-align:center;
-      position: relative;
-      overflow:hidden;
     }
-    .modalCard h2{ margin:0 0 8px; font-size:22px; color:var(--text); }
-    .modalCard p{ margin:0 0 14px; }
     .close{
-      padding:10px 14px;
-      border-radius:999px;
-      border:none;
-      cursor:pointer;
+      padding:10px 14px; border-radius:999px; border:none; cursor:pointer;
       background: linear-gradient(135deg, #ff2f92, #ff7bbd);
       color:white;
       box-shadow: 0 10px 22px rgba(255,47,146,.22);
     }
 
-    /* CAPA CELEBRACIÓN (NO BLOQUEA CLICKS) */
-    .confetti-layer{
-      position:fixed;
-      inset:0;
-      pointer-events:none; /* ✅ nunca bloquea */
-      z-index:5;
-      overflow:hidden;
+    /* Capa celebración: NO bloquea */
+    .celebrate{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:9;
       display:none;
+      overflow:hidden;
     }
-    .confetti-layer.show{ display:block; }
+    .celebrate.show{ display:block; }
 
-    .celebration-heart{
-      position:absolute;
-      top:-10vh;
-      width:16px;
-      height:16px;
+    .fall-heart{
+      position:absolute; top:-10vh;
+      width:16px; height:16px;
       transform: rotate(45deg);
-      opacity:.95;
-      animation: heartFall linear forwards;
       filter: drop-shadow(0 10px 16px rgba(255,79,163,.25));
+      animation: fall linear forwards;
+      opacity:.95;
     }
-    .celebration-heart::before,
-    .celebration-heart::after{
-      content:"";
-      position:absolute;
-      width:16px;
-      height:16px;
-      border-radius:50%;
+    .fall-heart::before,.fall-heart::after{
+      content:""; position:absolute;
+      width:16px; height:16px; border-radius:50%;
       background: linear-gradient(135deg, var(--pink2), var(--pink));
     }
-    .celebration-heart::before{ left:-8px; top:0; }
-    .celebration-heart::after{ left:0; top:-8px; }
-
-    @keyframes heartFall{
+    .fall-heart::before{ left:-8px; top:0; }
+    .fall-heart::after{ left:0; top:-8px; }
+    @keyframes fall{
       to{
         transform: translate3d(var(--dx), 120vh, 0)
                    rotate(calc(45deg + var(--rot)))
@@ -266,38 +170,122 @@
         opacity:1;
       }
     }
-
-    .mini-heart{
-      position:absolute;
-      width:14px;
-      height:14px;
-      transform: rotate(45deg);
-      opacity:.85;
-      animation: pop 900ms ease-out forwards;
-      filter: drop-shadow(0 10px 16px rgba(255,79,163,.25));
-    }
-    .mini-heart:before,
-    .mini-heart:after{
-      content:"";
-      position:absolute;
-      width:14px;
-      height:14px;
-      border-radius:50%;
-      background: linear-gradient(135deg, var(--pink2), var(--pink));
-    }
-    .mini-heart:before{ left:-7px; top:0; }
-    .mini-heart:after{ left:0; top:-7px; }
-
-    @keyframes pop{
-      0%{ transform: translate3d(0,0,0) rotate(45deg) scale(.6); opacity:.0; }
-      15%{ opacity: .95; }
-      100%{ transform: translate3d(var(--mx), var(--my), 0) rotate(calc(45deg + var(--mr))) scale(1.2); opacity:0; }
-    }
   </style>
+
+  <!-- ✅ defer asegura que el JS corre después del HTML -->
+  <script defer>
+    // util
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      // Fondo corazones
+      const hearts = document.getElementById("hearts");
+      for (let i=0;i<36;i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.style.left = rand(0,100) + "vw";
+        h.style.top = rand(100,140) + "vh";
+        h.style.animationDuration = rand(6,14) + "s";
+        h.style.animationDelay = rand(-14,0) + "s";
+        h.style.setProperty("--s", rand(0.7, 1.6));
+        h.style.setProperty("--dx", rand(-40, 40) + "vw");
+        h.style.setProperty("--rot", rand(-120, 120) + "deg");
+        hearts.appendChild(h);
+      }
+
+      const stage = document.getElementById("stage");
+      const noBtn = document.getElementById("noBtn");
+      const modal = document.getElementById("modal");
+      const closeBtn = document.getElementById("closeBtn");
+      const celebrate = document.getElementById("celebrate");
+
+      // --- NO escapa ---
+      function placeNo(x, y){
+        const rect = stage.getBoundingClientRect();
+        const b = noBtn.getBoundingClientRect();
+        const maxX = rect.width - b.width - 10;
+        const maxY = rect.height - b.height - 10;
+        noBtn.style.left = Math.max(10, Math.min(x, maxX)) + "px";
+        noBtn.style.top  = Math.max(10, Math.min(y, maxY)) + "px";
+        noBtn.style.transform = "translate(0,0)";
+      }
+      function initNoAbsolute(){
+        const rStage = stage.getBoundingClientRect();
+        const rNo = noBtn.getBoundingClientRect();
+        placeNo(rNo.left - rStage.left, rNo.top - rStage.top);
+      }
+      initNoAbsolute();
+      window.addEventListener("resize", initNoAbsolute);
+
+      function escapeNo(pointerX, pointerY){
+        const rect = stage.getBoundingClientRect();
+        const b = noBtn.getBoundingClientRect();
+        const px = pointerX - rect.left;
+        const py = pointerY - rect.top;
+
+        let tries=0, nx=10, ny=10, dist=0;
+        do{
+          nx = rand(10, rect.width - b.width - 10);
+          ny = rand(10, rect.height - b.height - 10);
+          const dx = (nx + b.width/2) - px;
+          const dy = (ny + b.height/2) - py;
+          dist = Math.hypot(dx, dy);
+          tries++;
+        }while(dist < 140 && tries < 12);
+
+        placeNo(nx, ny);
+      }
+
+      stage.addEventListener("mousemove", (e) => {
+        const b = noBtn.getBoundingClientRect();
+        const dist = Math.hypot((b.left + b.width/2) - e.clientX, (b.top + b.height/2) - e.clientY);
+        if (dist < 110) escapeNo(e.clientX, e.clientY);
+      });
+      noBtn.addEventListener("mouseenter", (e) => escapeNo(e.clientX, e.clientY));
+      noBtn.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); escapeNo(e.clientX, e.clientY); });
+
+      // --- Celebración corazones ---
+      function heartsRain(){
+        celebrate.classList.add("show");
+        const count = 90;
+        for(let i=0;i<count;i++){
+          const h = document.createElement("div");
+          h.className = "fall-heart";
+          h.style.left = rand(0, 100) + "vw";
+          h.style.animationDuration = rand(3.2, 5.2) + "s";
+          h.style.setProperty("--dx", rand(-25, 25) + "vw");
+          h.style.setProperty("--rot", rand(-180, 180) + "deg");
+          h.style.setProperty("--s", rand(0.6, 1.9));
+          celebrate.appendChild(h);
+          setTimeout(()=>h.remove(), 6000);
+        }
+        setTimeout(()=>celebrate.classList.remove("show"), 6000);
+      }
+
+      // ✅ Event delegation: aunque algo tape el botón, capturamos click
+      document.addEventListener("click", (e) => {
+        const target = e.target;
+        if (target && target.id === "yesBtn"){
+          heartsRain();
+          modal.classList.add("show");
+        }
+        if (target && target.id === "closeBtn"){
+          modal.classList.remove("show");
+        }
+        if (target === modal){
+          modal.classList.remove("show");
+        }
+      }, true);
+
+      // señal de vida
+      console.log("JS OK ✅");
+    });
+  </script>
 </head>
+
 <body>
   <div class="hearts" id="hearts"></div>
-  <div class="confetti-layer" id="confettiLayer"></div>
+  <div class="celebrate" id="celebrate"></div>
 
   <div class="wrap">
     <div class="card">
@@ -312,7 +300,7 @@
         <div class="sparkle"></div>
         <div class="buttons">
           <button class="btn yes" id="yesBtn" type="button">Sí 💖</button>
-          <button class="btn no" id="noBtn" type="button" aria-label="No">No 🙈</button>
+          <button class="btn no" id="noBtn" type="button">No 🙈</button>
         </div>
       </div>
 
@@ -327,177 +315,5 @@
       <button class="close" id="closeBtn" type="button">Cerrar 💘</button>
     </div>
   </div>
-
-  <script>
-    // ====== Util ======
-    function rand(min, max){ return Math.random() * (max - min) + min; }
-
-    // ====== Corazones de fondo ======
-    const hearts = document.getElementById("hearts");
-    const COUNT = 36;
-
-    for (let i = 0; i < COUNT; i++){
-      const h = document.createElement("div");
-      h.className = "heart";
-      const left = rand(0, 100);
-      const dur = rand(6, 14);
-      const delay = rand(-14, 0);
-      const size = rand(0.7, 1.6);
-      const dx = rand(-40, 40) + "vw";
-      const rot = rand(-120, 120) + "deg";
-
-      h.style.left = left + "vw";
-      h.style.top = rand(100, 140) + "vh";
-      h.style.animationDuration = dur + "s";
-      h.style.animationDelay = delay + "s";
-      h.style.setProperty("--s", size);
-      h.style.setProperty("--dx", dx);
-      h.style.setProperty("--rot", rot);
-      hearts.appendChild(h);
-    }
-
-    // ====== Elementos ======
-    const stage = document.getElementById("stage");
-    const noBtn = document.getElementById("noBtn");
-    const yesBtn = document.getElementById("yesBtn");
-    const modal = document.getElementById("modal");
-    const closeBtn = document.getElementById("closeBtn");
-    const confettiLayer = document.getElementById("confettiLayer");
-
-    // ====== "No" escapa ======
-    function placeNo(x, y){
-      const rect = stage.getBoundingClientRect();
-      const b = noBtn.getBoundingClientRect();
-      const maxX = rect.width - b.width - 10;
-      const maxY = rect.height - b.height - 10;
-      const nx = Math.max(10, Math.min(x, maxX));
-      const ny = Math.max(10, Math.min(y, maxY));
-      noBtn.style.left = nx + "px";
-      noBtn.style.top = ny + "px";
-      noBtn.style.transform = "translate(0,0)";
-    }
-
-    function initNoAbsolute(){
-      const rStage = stage.getBoundingClientRect();
-      const rNo = noBtn.getBoundingClientRect();
-      const x = rNo.left - rStage.left;
-      const y = rNo.top - rStage.top;
-      placeNo(x, y);
-    }
-    window.addEventListener("load", initNoAbsolute);
-    window.addEventListener("resize", initNoAbsolute);
-
-    function escapeNo(pointerX, pointerY){
-      const rect = stage.getBoundingClientRect();
-      const b = noBtn.getBoundingClientRect();
-      const px = pointerX - rect.left;
-      const py = pointerY - rect.top;
-
-      let tries = 0;
-      let nx, ny, dist;
-
-      do{
-        nx = rand(10, rect.width - b.width - 10);
-        ny = rand(10, rect.height - b.height - 10);
-        const dx = (nx + b.width/2) - px;
-        const dy = (ny + b.height/2) - py;
-        dist = Math.hypot(dx, dy);
-        tries++;
-      } while (dist < 140 && tries < 12);
-
-      placeNo(nx, ny);
-
-      noBtn.animate(
-        [{ transform: "translate(0,0) scale(1)" }, { transform: "translate(0,0) scale(1.05)" }, { transform: "translate(0,0) scale(1)" }],
-        { duration: 180, easing: "ease-out" }
-      );
-    }
-
-    stage.addEventListener("mousemove", (e) => {
-      const b = noBtn.getBoundingClientRect();
-      const dist = Math.hypot((b.left + b.width/2) - e.clientX, (b.top + b.height/2) - e.clientY);
-      if (dist < 110) escapeNo(e.clientX, e.clientY);
-    });
-
-    noBtn.addEventListener("mouseenter", (e) => escapeNo(e.clientX, e.clientY));
-    noBtn.addEventListener("click", (e) => {
-      escapeNo(e.clientX, e.clientY);
-      e.preventDefault();
-      e.stopPropagation();
-    });
-
-    stage.addEventListener("touchstart", (e) => {
-      const t = e.touches[0];
-      if (!t) return;
-      const b = noBtn.getBoundingClientRect();
-      const dist = Math.hypot((b.left + b.width/2) - t.clientX, (b.top + b.height/2) - t.clientY);
-      if (dist < 140) escapeNo(t.clientX, t.clientY);
-    }, { passive: true });
-
-    // ====== Celebración ======
-    function startHeartsRain(){
-      confettiLayer.classList.add("show");
-
-      const heartsCount = 90;
-      for(let i = 0; i < heartsCount; i++){
-        const h = document.createElement("div");
-        h.className = "celebration-heart";
-        h.style.left = rand(0, 100) + "vw";
-        h.style.animationDuration = rand(3.2, 5.2) + "s";
-        h.style.setProperty("--dx", rand(-25, 25) + "vw");
-        h.style.setProperty("--rot", rand(-180, 180) + "deg");
-        h.style.setProperty("--s", rand(0.6, 1.9));
-        confettiLayer.appendChild(h);
-        setTimeout(() => h.remove(), 6000);
-      }
-      setTimeout(() => confettiLayer.classList.remove("show"), 6000);
-    }
-
-    function burstHearts(cx, cy){
-      for(let i=0;i<18;i++){
-        const mh = document.createElement("div");
-        mh.className = "mini-heart";
-        mh.style.left = cx + "px";
-        mh.style.top = cy + "px";
-        mh.style.setProperty("--mx", rand(-140, 140) + "px");
-        mh.style.setProperty("--my", rand(-160, 120) + "px");
-        mh.style.setProperty("--mr", rand(-120, 120) + "deg");
-        confettiLayer.appendChild(mh);
-        setTimeout(() => mh.remove(), 950);
-      }
-    }
-
-    // ====== "Sí" ======
-    function onYes(){
-      // feedback visual
-      yesBtn.animate(
-        [{ transform: "translate(-120%, -50%) scale(1)" }, { transform: "translate(-120%, -50%) scale(1.06)" }, { transform: "translate(-120%, -50%) scale(1)" }],
-        { duration: 180, easing: "ease-out" }
-      );
-
-      const r = yesBtn.getBoundingClientRect();
-      const cx = r.left + r.width/2;
-      const cy = r.top + r.height/2;
-
-      // Celebración + modal (con fallback)
-      try{
-        startHeartsRain();
-        burstHearts(cx, cy);
-      }catch(err){
-        console.error("Celebración falló:", err);
-      }
-      modal.classList.add("show");
-    }
-
-    // ✅ Asegura click y touch
-    yesBtn.addEventListener("click", onYes, { passive: true });
-    yesBtn.addEventListener("touchend", (e) => { e.preventDefault(); onYes(); }, { passive: false });
-
-    // Modal close
-    closeBtn.addEventListener("click", () => modal.classList.remove("show"));
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) modal.classList.remove("show");
-    });
-  </script>
 </body>
 </html>
