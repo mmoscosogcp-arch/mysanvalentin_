@@ -57,12 +57,8 @@
     .heart:after{ left:0; top:-9px; }
 
     @keyframes floatUp{
-      from{
-        transform: translate3d(0,0,0) rotate(45deg) scale(var(--s));
-      }
-      to{
-        transform: translate3d(var(--dx), -120vh, 0) rotate(calc(45deg + var(--rot))) scale(var(--s));
-      }
+      from{ transform: translate3d(0,0,0) rotate(45deg) scale(var(--s)); }
+      to{ transform: translate3d(var(--dx), -120vh, 0) rotate(calc(45deg + var(--rot))) scale(var(--s)); }
     }
 
     /* Contenedor principal */
@@ -133,11 +129,27 @@
       background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.35));
       border:1px dashed rgba(255,79,163,.35);
       overflow:hidden;
+      z-index: 1; /* ✅ asegura clicks */
+    }
+
+    .sparkle{
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.6), transparent 45%),
+                  radial-gradient(circle at 70% 60%, rgba(255,255,255,.5), transparent 50%);
+      animation: shimmer 6s ease-in-out infinite;
+      opacity:.35;
+      pointer-events:none;
+    }
+    @keyframes shimmer{
+      0%,100%{ transform: translate3d(-2%, -1%, 0) rotate(-2deg); }
+      50%{ transform: translate3d(2%, 1%, 0) rotate(2deg); }
     }
 
     .buttons{
       position:absolute;
       inset:0;
+      z-index: 2; /* ✅ botones arriba */
     }
     .btn{
       position:absolute;
@@ -188,7 +200,7 @@
       justify-content:center;
       padding:24px;
       background: rgba(0,0,0,.18);
-      z-index:3;
+      z-index:6;
     }
     .modal.show{ display:flex; }
     .modalCard{
@@ -213,33 +225,17 @@
       box-shadow: 0 10px 22px rgba(255,47,146,.22);
     }
 
-    /* Pequeño brillo */
-    .sparkle{
-      position:absolute;
-      inset:-40%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.6), transparent 45%),
-                  radial-gradient(circle at 70% 60%, rgba(255,255,255,.5), transparent 50%);
-      animation: shimmer 6s ease-in-out infinite;
-      opacity:.35;
-      pointer-events:none;
-    }
-    @keyframes shimmer{
-      0%,100%{ transform: translate3d(-2%, -1%, 0) rotate(-2deg); }
-      50%{ transform: translate3d(2%, 1%, 0) rotate(2deg); }
-    }
-
-    /* CAPA CELEBRACIÓN */
+    /* CAPA CELEBRACIÓN (NO BLOQUEA CLICKS) */
     .confetti-layer{
       position:fixed;
       inset:0;
-      pointer-events:none;
-      z-index:4;
+      pointer-events:none; /* ✅ nunca bloquea */
+      z-index:5;
       overflow:hidden;
       display:none;
     }
     .confetti-layer.show{ display:block; }
 
-    /* Corazones que caen (celebración) */
     .celebration-heart{
       position:absolute;
       top:-10vh;
@@ -271,7 +267,6 @@
       }
     }
 
-    /* Explosión de mini corazones */
     .mini-heart{
       position:absolute;
       width:14px;
@@ -306,9 +301,7 @@
 
   <div class="wrap">
     <div class="card">
-
       <div class="photo">
-        <!-- Cambia "foto.jpg" por el nombre real de tu archivo -->
         <img src="foto.jpg" alt="Nosotros 💖" />
       </div>
 
@@ -318,8 +311,8 @@
       <div class="stage" id="stage">
         <div class="sparkle"></div>
         <div class="buttons">
-          <button class="btn yes" id="yesBtn">Sí 💖</button>
-          <button class="btn no" id="noBtn" aria-label="No">No 🙈</button>
+          <button class="btn yes" id="yesBtn" type="button">Sí 💖</button>
+          <button class="btn no" id="noBtn" type="button" aria-label="No">No 🙈</button>
         </div>
       </div>
 
@@ -331,7 +324,7 @@
     <div class="modalCard">
       <h2>¡SÍÍÍ! 🥹💞</h2>
       <p>Mi princesa, gracias por decir que sí. Te amo 💗</p>
-      <button class="close" id="closeBtn">Cerrar 💘</button>
+      <button class="close" id="closeBtn" type="button">Cerrar 💘</button>
     </div>
   </div>
 
@@ -360,17 +353,18 @@
       h.style.setProperty("--s", size);
       h.style.setProperty("--dx", dx);
       h.style.setProperty("--rot", rot);
-
       hearts.appendChild(h);
     }
 
-    // ====== Botón "No" que se escapa ======
+    // ====== Elementos ======
     const stage = document.getElementById("stage");
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
     const modal = document.getElementById("modal");
     const closeBtn = document.getElementById("closeBtn");
+    const confettiLayer = document.getElementById("confettiLayer");
 
+    // ====== "No" escapa ======
     function placeNo(x, y){
       const rect = stage.getBoundingClientRect();
       const b = noBtn.getBoundingClientRect();
@@ -440,9 +434,7 @@
       if (dist < 140) escapeNo(t.clientX, t.clientY);
     }, { passive: true });
 
-    // ====== Celebración con corazones ======
-    const confettiLayer = document.getElementById("confettiLayer");
-
+    // ====== Celebración ======
     function startHeartsRain(){
       confettiLayer.classList.add("show");
 
@@ -450,17 +442,14 @@
       for(let i = 0; i < heartsCount; i++){
         const h = document.createElement("div");
         h.className = "celebration-heart";
-
         h.style.left = rand(0, 100) + "vw";
         h.style.animationDuration = rand(3.2, 5.2) + "s";
         h.style.setProperty("--dx", rand(-25, 25) + "vw");
         h.style.setProperty("--rot", rand(-180, 180) + "deg");
-        h.style.setProperty("--s", rand(0.6, 1.9)); // tamaños distintos 💗
-
+        h.style.setProperty("--s", rand(0.6, 1.9));
         confettiLayer.appendChild(h);
         setTimeout(() => h.remove(), 6000);
       }
-
       setTimeout(() => confettiLayer.classList.remove("show"), 6000);
     }
 
@@ -478,18 +467,33 @@
       }
     }
 
-    // ====== "Sí" abre mensaje + celebración ======
-    yesBtn.addEventListener("click", () => {
+    // ====== "Sí" ======
+    function onYes(){
+      // feedback visual
+      yesBtn.animate(
+        [{ transform: "translate(-120%, -50%) scale(1)" }, { transform: "translate(-120%, -50%) scale(1.06)" }, { transform: "translate(-120%, -50%) scale(1)" }],
+        { duration: 180, easing: "ease-out" }
+      );
+
       const r = yesBtn.getBoundingClientRect();
       const cx = r.left + r.width/2;
       const cy = r.top + r.height/2;
 
-      startHeartsRain();
-      burstHearts(cx, cy);
-
+      // Celebración + modal (con fallback)
+      try{
+        startHeartsRain();
+        burstHearts(cx, cy);
+      }catch(err){
+        console.error("Celebración falló:", err);
+      }
       modal.classList.add("show");
-    });
+    }
 
+    // ✅ Asegura click y touch
+    yesBtn.addEventListener("click", onYes, { passive: true });
+    yesBtn.addEventListener("touchend", (e) => { e.preventDefault(); onYes(); }, { passive: false });
+
+    // Modal close
     closeBtn.addEventListener("click", () => modal.classList.remove("show"));
     modal.addEventListener("click", (e) => {
       if (e.target === modal) modal.classList.remove("show");
@@ -497,4 +501,3 @@
   </script>
 </body>
 </html>
-
