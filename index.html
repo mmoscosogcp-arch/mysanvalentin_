@@ -79,18 +79,47 @@
       background:var(--card);
       border:1px solid rgba(255,255,255,.55);
       border-radius:24px;
-      padding:28px 22px;
+      padding:22px 18px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
     }
+
+    /* FOTO */
+    .photo{
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      border-radius: 18px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.7);
+      box-shadow: 0 18px 40px rgba(90,22,54,.14);
+      margin-bottom: 14px;
+      position: relative;
+      background: rgba(255,255,255,.5);
+    }
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      transform: scale(1.02);
+    }
+    .photo::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(circle at 20% 20%, rgba(255,255,255,.45), transparent 55%),
+                  linear-gradient(180deg, rgba(255,79,163,.10), transparent 60%);
+      pointer-events:none;
+    }
+
     h1{
       margin:0 0 8px;
-      font-size: clamp(26px, 4vw, 34px);
+      font-size: clamp(24px, 4vw, 32px);
       letter-spacing:.2px;
       text-align:center;
     }
     p{
-      margin:0 0 18px;
+      margin:0 0 16px;
       text-align:center;
       line-height:1.35;
       font-size: 16px;
@@ -169,6 +198,8 @@
       padding:22px 18px;
       box-shadow: 0 22px 60px rgba(0,0,0,.25);
       text-align:center;
+      position: relative;
+      overflow:hidden;
     }
     .modalCard h2{ margin:0 0 8px; font-size:22px; color:var(--text); }
     .modalCard p{ margin:0 0 14px; }
@@ -196,15 +227,93 @@
       0%,100%{ transform: translate3d(-2%, -1%, 0) rotate(-2deg); }
       50%{ transform: translate3d(2%, 1%, 0) rotate(2deg); }
     }
+
+    /* CAPA CELEBRACIÓN */
+    .confetti-layer{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:4;
+      overflow:hidden;
+      display:none;
+    }
+    .confetti-layer.show{ display:block; }
+
+    /* Corazones que caen (celebración) */
+    .celebration-heart{
+      position:absolute;
+      top:-10vh;
+      width:16px;
+      height:16px;
+      transform: rotate(45deg);
+      opacity:.95;
+      animation: heartFall linear forwards;
+      filter: drop-shadow(0 10px 16px rgba(255,79,163,.25));
+    }
+    .celebration-heart::before,
+    .celebration-heart::after{
+      content:"";
+      position:absolute;
+      width:16px;
+      height:16px;
+      border-radius:50%;
+      background: linear-gradient(135deg, var(--pink2), var(--pink));
+    }
+    .celebration-heart::before{ left:-8px; top:0; }
+    .celebration-heart::after{ left:0; top:-8px; }
+
+    @keyframes heartFall{
+      to{
+        transform: translate3d(var(--dx), 120vh, 0)
+                   rotate(calc(45deg + var(--rot)))
+                   scale(var(--s));
+        opacity:1;
+      }
+    }
+
+    /* Explosión de mini corazones */
+    .mini-heart{
+      position:absolute;
+      width:14px;
+      height:14px;
+      transform: rotate(45deg);
+      opacity:.85;
+      animation: pop 900ms ease-out forwards;
+      filter: drop-shadow(0 10px 16px rgba(255,79,163,.25));
+    }
+    .mini-heart:before,
+    .mini-heart:after{
+      content:"";
+      position:absolute;
+      width:14px;
+      height:14px;
+      border-radius:50%;
+      background: linear-gradient(135deg, var(--pink2), var(--pink));
+    }
+    .mini-heart:before{ left:-7px; top:0; }
+    .mini-heart:after{ left:0; top:-7px; }
+
+    @keyframes pop{
+      0%{ transform: translate3d(0,0,0) rotate(45deg) scale(.6); opacity:.0; }
+      15%{ opacity: .95; }
+      100%{ transform: translate3d(var(--mx), var(--my), 0) rotate(calc(45deg + var(--mr))) scale(1.2); opacity:0; }
+    }
   </style>
 </head>
 <body>
   <div class="hearts" id="hearts"></div>
+  <div class="confetti-layer" id="confettiLayer"></div>
 
   <div class="wrap">
     <div class="card">
-      <h1>¿Quieres ser mi San Valentín? 💘</h1>
-      <p>Prometo risas, abrazos, y un montón de momentos bonitos contigo ✨</p>
+
+      <div class="photo">
+        <!-- Cambia "foto.jpg" por el nombre real de tu archivo -->
+        <img src="foto.jpg" alt="Nosotros 💖" />
+      </div>
+
+      <h1>Mi princesa… ¿quieres ser mi San Valentín? 💘</h1>
+      <p>Prometo risas, abrazos y una colección infinita de momentos bonitos contigo ✨</p>
 
       <div class="stage" id="stage">
         <div class="sparkle"></div>
@@ -220,25 +329,26 @@
 
   <div class="modal" id="modal">
     <div class="modalCard">
-      <h2>¡Sabía que dirías que sí! 🥹💞</h2>
-      <p>Ya eres oficialmente mi San Valentín. Te adoro 💗</p>
+      <h2>¡SÍÍÍ! 🥹💞</h2>
+      <p>Mi princesa, gracias por decir que sí. Te amo 💗</p>
       <button class="close" id="closeBtn">Cerrar 💘</button>
     </div>
   </div>
 
   <script>
-    // ====== Generar corazones animados ======
+    // ====== Util ======
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    // ====== Corazones de fondo ======
     const hearts = document.getElementById("hearts");
     const COUNT = 36;
-
-    function rand(min, max){ return Math.random() * (max - min) + min; }
 
     for (let i = 0; i < COUNT; i++){
       const h = document.createElement("div");
       h.className = "heart";
       const left = rand(0, 100);
       const dur = rand(6, 14);
-      const delay = rand(-14, 0); // arranca ya “en movimiento”
+      const delay = rand(-14, 0);
       const size = rand(0.7, 1.6);
       const dx = rand(-40, 40) + "vw";
       const rot = rand(-120, 120) + "deg";
@@ -261,11 +371,9 @@
     const modal = document.getElementById("modal");
     const closeBtn = document.getElementById("closeBtn");
 
-    // Posición inicial (por si el layout cambia en móviles)
     function placeNo(x, y){
       const rect = stage.getBoundingClientRect();
       const b = noBtn.getBoundingClientRect();
-      // Limitar dentro del stage
       const maxX = rect.width - b.width - 10;
       const maxY = rect.height - b.height - 10;
       const nx = Math.max(10, Math.min(x, maxX));
@@ -275,7 +383,6 @@
       noBtn.style.transform = "translate(0,0)";
     }
 
-    // Convertimos el botón "No" a posicionamiento absoluto real dentro del stage
     function initNoAbsolute(){
       const rStage = stage.getBoundingClientRect();
       const rNo = noBtn.getBoundingClientRect();
@@ -289,36 +396,30 @@
     function escapeNo(pointerX, pointerY){
       const rect = stage.getBoundingClientRect();
       const b = noBtn.getBoundingClientRect();
-
-      // Coordenadas del puntero dentro del stage
       const px = pointerX - rect.left;
       const py = pointerY - rect.top;
 
-      // Elegir un nuevo lugar "lejos" del puntero
       let tries = 0;
-      let nx, ny;
+      let nx, ny, dist;
 
       do{
         nx = rand(10, rect.width - b.width - 10);
         ny = rand(10, rect.height - b.height - 10);
         const dx = (nx + b.width/2) - px;
         const dy = (ny + b.height/2) - py;
-        var dist = Math.hypot(dx, dy);
+        dist = Math.hypot(dx, dy);
         tries++;
       } while (dist < 140 && tries < 12);
 
       placeNo(nx, ny);
 
-      // mini "shake" divertido
       noBtn.animate(
         [{ transform: "translate(0,0) scale(1)" }, { transform: "translate(0,0) scale(1.05)" }, { transform: "translate(0,0) scale(1)" }],
         { duration: 180, easing: "ease-out" }
       );
     }
 
-    // Se escapa cuando se acercan con mouse o tocan en móvil
     stage.addEventListener("mousemove", (e) => {
-      // Si el cursor está cerca del botón, huye
       const b = noBtn.getBoundingClientRect();
       const dist = Math.hypot((b.left + b.width/2) - e.clientX, (b.top + b.height/2) - e.clientY);
       if (dist < 110) escapeNo(e.clientX, e.clientY);
@@ -326,24 +427,69 @@
 
     noBtn.addEventListener("mouseenter", (e) => escapeNo(e.clientX, e.clientY));
     noBtn.addEventListener("click", (e) => {
-      // Por si alguien logra clic: igual se escapa y no hace nada
       escapeNo(e.clientX, e.clientY);
       e.preventDefault();
       e.stopPropagation();
     });
 
-    // Touch (móvil)
     stage.addEventListener("touchstart", (e) => {
       const t = e.touches[0];
       if (!t) return;
-      // Si tocan cerca, huye
       const b = noBtn.getBoundingClientRect();
       const dist = Math.hypot((b.left + b.width/2) - t.clientX, (b.top + b.height/2) - t.clientY);
       if (dist < 140) escapeNo(t.clientX, t.clientY);
     }, { passive: true });
 
-    // ====== "Sí" abre mensaje ======
-    yesBtn.addEventListener("click", () => modal.classList.add("show"));
+    // ====== Celebración con corazones ======
+    const confettiLayer = document.getElementById("confettiLayer");
+
+    function startHeartsRain(){
+      confettiLayer.classList.add("show");
+
+      const heartsCount = 90;
+      for(let i = 0; i < heartsCount; i++){
+        const h = document.createElement("div");
+        h.className = "celebration-heart";
+
+        h.style.left = rand(0, 100) + "vw";
+        h.style.animationDuration = rand(3.2, 5.2) + "s";
+        h.style.setProperty("--dx", rand(-25, 25) + "vw");
+        h.style.setProperty("--rot", rand(-180, 180) + "deg");
+        h.style.setProperty("--s", rand(0.6, 1.9)); // tamaños distintos 💗
+
+        confettiLayer.appendChild(h);
+        setTimeout(() => h.remove(), 6000);
+      }
+
+      setTimeout(() => confettiLayer.classList.remove("show"), 6000);
+    }
+
+    function burstHearts(cx, cy){
+      for(let i=0;i<18;i++){
+        const mh = document.createElement("div");
+        mh.className = "mini-heart";
+        mh.style.left = cx + "px";
+        mh.style.top = cy + "px";
+        mh.style.setProperty("--mx", rand(-140, 140) + "px");
+        mh.style.setProperty("--my", rand(-160, 120) + "px");
+        mh.style.setProperty("--mr", rand(-120, 120) + "deg");
+        confettiLayer.appendChild(mh);
+        setTimeout(() => mh.remove(), 950);
+      }
+    }
+
+    // ====== "Sí" abre mensaje + celebración ======
+    yesBtn.addEventListener("click", () => {
+      const r = yesBtn.getBoundingClientRect();
+      const cx = r.left + r.width/2;
+      const cy = r.top + r.height/2;
+
+      startHeartsRain();
+      burstHearts(cx, cy);
+
+      modal.classList.add("show");
+    });
+
     closeBtn.addEventListener("click", () => modal.classList.remove("show"));
     modal.addEventListener("click", (e) => {
       if (e.target === modal) modal.classList.remove("show");
@@ -351,3 +497,4 @@
   </script>
 </body>
 </html>
+
