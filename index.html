@@ -1,4 +1,4 @@
-<!doctype html>
+!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
@@ -27,17 +27,27 @@
 
     .hearts{ position:fixed; inset:0; pointer-events:none; z-index:0; }
     .heart{
-      position:absolute; width:18px; height:18px;
-      transform: rotate(45deg);
-      opacity:.55;
-      filter: drop-shadow(0 6px 10px rgba(255,79,163,.25));
-      animation: floatUp linear infinite;
+    position:absolute;
+    width:18px;
+    height:18px;
+    transform: rotate(45deg);
+    opacity:.55;
+    filter: drop-shadow(0 6px 10px rgba(255,79,163,.25));
+    animation: floatUp linear infinite;
+
+    /* ✅ cuerpo del corazón */
+    background: linear-gradient(135deg, var(--pink2), var(--pink));
     }
+
     .heart:before,.heart:after{
-      content:""; position:absolute; width:18px; height:18px; border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, #fff, transparent 45%),
-                  linear-gradient(135deg, var(--pink2), var(--pink));
-    }
+    content:"";
+    position:absolute;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background: linear-gradient(135deg, var(--pink2), var(--pink));
+    } 
+
     .heart:before{ left:-9px; top:0; }
     .heart:after{ left:0; top:-9px; }
     @keyframes floatUp{
@@ -148,18 +158,28 @@
     .celebrate.show{ display:block; }
 
     .fall-heart{
-      position:absolute; top:-10vh;
-      width:16px; height:16px;
-      transform: rotate(45deg);
-      filter: drop-shadow(0 10px 16px rgba(255,79,163,.25));
-      animation: fall linear forwards;
-      opacity:.95;
+    position:absolute;
+    top:-10vh;
+    width:16px;
+    height:16px;
+    transform: rotate(45deg);
+    filter: drop-shadow(0 10px 16px rgba(255,79,163,.25));
+    animation: fall linear forwards;
+    opacity:.95;
+
+    /* ✅ cuerpo del corazón */
+    background: linear-gradient(135deg, var(--pink2), var(--pink));
     }
+
     .fall-heart::before,.fall-heart::after{
-      content:""; position:absolute;
-      width:16px; height:16px; border-radius:50%;
-      background: linear-gradient(135deg, var(--pink2), var(--pink));
+    content:"";
+    position:absolute;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background: linear-gradient(135deg, var(--pink2), var(--pink));
     }
+
     .fall-heart::before{ left:-8px; top:0; }
     .fall-heart::after{ left:0; top:-8px; }
     @keyframes fall{
